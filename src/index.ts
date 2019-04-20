@@ -1,5 +1,7 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+// tslint:disable-next-line:import-name
+import createError, { HttpError } from 'http-errors';
 
 // tslint:disable-next-line:import-name
 import PatientController from './Patient.controller';
@@ -15,6 +17,16 @@ app.get('/', (req, res) => {
 });
 
 PatientController.route(app, '/patient');
+
+// Not found error.
+app.use((req, res, next) => {
+  next(createError(404, 'Not found.'));
+});
+
+// Handle errors.
+app.use((err: HttpError & Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.status || 500).send(err.message);
+});
 
 app.listen(PORT, (err: Error) => {
   if (err) {
