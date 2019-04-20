@@ -1,1 +1,1 @@
-# Just a basic template I wrote to use express with typescript!
+# Pacient store for online psychologist app.
