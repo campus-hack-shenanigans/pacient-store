@@ -1,20 +1,14 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-
-// tslint:disable-next-line:import-name
-import PatientController from './Patient.controller';
 
 import { PORT } from './config';
 
 const app: express.Application = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello World!' });
+import { helloWorld } from './helloWorld';
+
+app.get('/', (req: express.Request, res: express.Response) => {
+  res.json({ message: helloWorld() });
 });
-
-PatientController.route(app, '/patient');
 
 app.listen(PORT, (err: Error) => {
   if (err) {
