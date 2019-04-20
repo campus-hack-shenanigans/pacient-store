@@ -8,3 +8,5 @@ class PsychologistSocket extends Socket {
     });
   }
 }
+
+export default PsychologistSocket;
