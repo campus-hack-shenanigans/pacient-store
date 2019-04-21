@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import http from 'http';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 // tslint:disable-next-line:import-name
 import createError, { HttpError } from 'http-errors';
 
-// tslint:disable-next-line:import-name
-import PatientController from './Patient.controller';
+import PatientController from './controllers/Patient.controller';
+import PsychologistController from './controllers/Psychologist.controller';
 
 import Socket from './sockets/Socket';
 // tslint:disable-next-line:import-name
@@ -18,6 +19,10 @@ import { PORT } from './config';
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
 Socket.init(server);
+app.use(cors({
+  origin: '*',
+  methods: '*',
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,7 +31,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' });
 });
 
-PatientController.route(app, '/patient');
+PatientController.route(app, '/api/patient');
+PsychologistController.router(app, '/api/psychologist');
 
 // Not found error.
 app.use((req, res, next) => {

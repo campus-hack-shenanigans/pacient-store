@@ -3,16 +3,29 @@ import { Application, Request, Response, NextFunction, Router } from 'express';
 // tslint:disable-next-line:import-name
 import createError from 'http-errors';
 
-import StoreClient from './StoreClient';
+import StoreClient from '../StoreClient';
 
 abstract class PatientController {
   private static store: StoreClient = new StoreClient();
 
   private static addPatient(req: Request, res: Response, next: NextFunction) {
+    // tslint:disable-next-line:prefer-const
+    let { name, problem, details } = req.body;
+    if (!name || name.length <= 0) {
+      next(createError(400, 'Name is required.'));
+      return;
+    }
+    if (!problem || problem.length <= 0) {
+      next(createError(400, 'Problem is required'));
+      return;
+    }
+    if (!details) {
+      details = '';
+    }
     PatientController.store.addPatient({
-      name: req.body.name,
-      problem: req.body.problem,
-      details: req.body.details,
+      name,
+      problem,
+      details,
     }).then(patient => res.status(200).send(patient))
       .catch(err => next(createError(400, err)));
   }

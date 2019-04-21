@@ -28,6 +28,15 @@ class StoreClient {
 
   public addPatient(patient: Patient): Promise<PatientEntry> {
     return new Promise<PatientEntry>((resolve, reject) => {
+      if (!patient.name || patient.name.length <= 0) {
+        reject(Error('Name is required.'));
+      }
+      if (!patient.problem || patient.problem.length <= 0) {
+        reject(Error('Problem is required'));
+      }
+      if (!patient.details) {
+        patient.details = '';
+      }
       this.client.incr('id', (err, id) => {
         if (err) {
           reject(err);
