@@ -14,8 +14,8 @@ class PatientSocket {
         socket.identifier = id;
         socket.join(`patient-${id}`);
       });
-      socket.on('pairFound', () => {
-        socket.emit('pairFound', true);
+      socket.on('pairFound', (psychologistId) => {
+        socket.emit('pairFound', psychologistId);
       });
       socket.on('disconnect', () => {
         // @ts-ignore
