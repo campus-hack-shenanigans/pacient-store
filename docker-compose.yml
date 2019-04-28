@@ -1,0 +1,16 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    container_name: store
+    expose:
+      - 6370
+  server:
+    build: ./
+    volumes:
+      - ./:/opt/server
+    links:
+      - redis
+    ports:
+      - 3000:3000
+    command: npm run dev

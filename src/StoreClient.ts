@@ -15,7 +15,9 @@ class StoreClient {
 
   constructor(options?: object) {
 
-    this.client = options ? redis.createClient(options) : redis.createClient();
+    this.client = options
+      ? redis.createClient('redis://store', options)
+        : redis.createClient('redis://store');
     this.client.flushall((err) => {
       if (err) {
         throw err;
